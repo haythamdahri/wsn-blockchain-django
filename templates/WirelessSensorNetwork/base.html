@@ -1,0 +1,97 @@
+{% load staticfiles %}
+{% load widget_tweaks %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="{% static 'WirelessSensorNetwork/images/logo.jpg' %}" />
+
+    {% block stylesheet %}
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static '/WirelessSensorNetwork/css/bootstrap.min.css' %}" />
+
+    <!-- Fontawesome CSS -->
+    <link rel="stylesheet" href="{% static '/WirelessSensorNetwork/css/all.min.css' %}" />
+
+    <!-- Chart js css -->
+    <link rel="stylesheet" href="{% static '/WirelessSensorNetwork/css/Chart.min.css' %}" />
+
+    <!-- Chart js css -->
+    <link rel="stylesheet" href="{% static '/WirelessSensorNetwork/css/style.css' %}" />
+    {% endblock %}
+
+
+    <title>WSN : {% block title %}{% endblock %}</title>
+
+</head>
+
+<body>
+
+    {% block header %}
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="{% url 'wsn:home' %}"><i class="fas fa-network-wired"></i> WSN</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'wsn:home' %}"><i class="fas fa-home"></i> Home <span
+                            class="sr-only">(current)</span></a>
+                </li>
+                {% if user is None or user == False %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login"><i class="fas fa-sign-in-alt"></i> Login</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                    <a class="nav-link" href="{% url 'wsn:profile' %}"><i class="far fa-user"></i> {{ user.address }}</a>
+                </li>
+                <li class="nav-item">
+                    <form method="POST" action="{% url 'wsn:logout' %}" id="disconnect">
+                         {% csrf_token %}
+                        <a class="nav-link" style="cursor: pointer;" onclick="document.getElementById('disconnect').submit()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    </form>
+                </li>
+
+                {% endif %}
+
+            </ul>
+            {% if user is not None %}
+                <form method="GET" action="{% url 'wsn:home' %}" class="form-inline my-2 my-lg-0">
+                    {% render_field search_form.search %}
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
+                        <i class="fab fa-searchengin"></i> Search
+                    </button>
+                </form>
+            {% endif %}
+        </div>
+    </nav>
+
+    {% endblock %}
+
+    <div class="container">
+        {% block content %}
+
+        {% endblock %}
+    </div>
+
+    {% block js %}
+    <script src="{% static 'WirelessSensorNetwork/js/jquery.min.js' %}"></script>
+    <script src="{% static 'WirelessSensorNetwork/js/popper.min.js' %}"></script>
+    <script src="{% static 'WirelessSensorNetwork/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'WirelessSensorNetwork/js/all.min.js' %}"></script>
+    <script src="{% static 'WirelessSensorNetwork/js/Chart.min.js' %}"></script>
+    <script src="{% static 'WirelessSensorNetwork/js/custom.js' %}"></script>
+    {% endblock %}
+
+</body>
+
+</html>

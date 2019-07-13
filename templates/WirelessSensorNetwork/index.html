@@ -1,0 +1,58 @@
+{% extends 'WirelessSensorNetwork/base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+    <!-- Sink node message -->
+    {% if user.is_sink_node is not None and user.is_sink_node %}
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <div class="alert alert-success" role="alert">
+                <h4 class="alert-heading"><i class="fas fa-door-open"></i> Welcome sink node</h4>
+                <p>Your account is designed as the sink node to receive data from cluster-headers</p>
+            </div>
+        </div>
+    {% endif %}
+
+    <!-- Messages part -->
+
+    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-right">
+        {% include 'WirelessSensorNetwork/parts/messages.html' %}
+    </div>
+
+    <!-- Send transaction button -->
+    {% if user.is_sink_node is None %}
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-right">
+            <button type="button" class="btn btn-primary" data-toggle="modal"
+                    data-target="#transaction-modal"><i class="fas fa-fast-forward"></i> Send transaction
+            </button>
+        </div>
+    {% endif %}
+
+    <!-- Transactions display -->
+    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+        {% for transaction in transactions %}
+            <div class="card mt-3 mb-3">
+                <div class="card-header">
+                    <strong><i class="far fa-paper-plane"></i> Sender: </strong> {{ transaction.sender }} | <strong><i
+                        class="fas fa-mail-bulk"></i> Receiver: </strong> {{ transaction.receiver }}
+                </div>
+                <div class="card-body">
+                    <blockquote class="blockquote mb-0">
+                        <p><i class="fas fa-database"></i></p>
+                        <p>{{ transaction.data }}</p>
+                        <footer class="blockquote-footer"><i class="far fa-clock"></i> Date: <cite
+                                title="Source Title">{{ transaction.transaction_date }}</cite>
+                        </footer>
+                    </blockquote>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Transaction modal form -->
+    {% include 'WirelessSensorNetwork/parts/transaction-modal.html' %}
+
+
+
+{% endblock %}

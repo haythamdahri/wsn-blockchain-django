@@ -1,0 +1,35 @@
+{% load widget_tweaks %}
+<!-- Modal -->
+<div class="modal fade bd-example-modal-xl" id="transaction-modal" tabindex="-1" role="dialog"
+     aria-labelledby="transaction-modal" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"><i class="fas fa-align-left"></i> Transaction Form
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"><i class="far fa-window-close"></i></span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <form id="transaction-form" action="{% url 'wsn:home' %}" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="data">Data</label>
+                        {% render_field transaction_form.data %}
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="far fa-window-close"></i>
+                    Close
+                </button>
+                <button onclick="document.getElementById('transaction-form').submit();" type="button"
+                        class="btn btn-primary"><i class="fas fa-share-alt-square"></i> Send transaction
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,103 @@
+[
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "nodes",
+		"outputs": [
+			{
+				"name": "nodeAddress",
+				"type": "address"
+			},
+			{
+				"name": "cluster",
+				"type": "int256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_sender",
+				"type": "address"
+			},
+			{
+				"name": "_receiver",
+				"type": "address"
+			},
+			{
+				"name": "_data",
+				"type": "string"
+			},
+			{
+				"name": "_date",
+				"type": "int256"
+			}
+		],
+		"name": "sendData",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "node_address",
+				"type": "address"
+			}
+		],
+		"name": "getTransactionsCount",
+		"outputs": [
+			{
+				"name": "",
+				"type": "int256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "clustersCounter",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"name": "nodes_addresses",
+				"type": "address[]"
+			},
+			{
+				"name": "clusters",
+				"type": "int256[]"
+			},
+			{
+				"name": "sink_node",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	}
+]

@@ -1,0 +1,50 @@
+{% extends 'WirelessSensorNetwork/base.html' %}
+{% load widget_tweaks %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+
+    <div class="card mt-5">
+        <div class="card-header">
+            <i class="fas fa-cubes"></i> User authentication
+        </div>
+        <div class="alert alert-danger" style="display: none" id="login-error-message">
+            <i class="fas fa-exclamation"></i> Please fill valid data!
+        </div>
+        <div class="card-body">
+
+            <!-- show any messages that come back with authentication -->
+            {% include 'WirelessSensorNetwork/parts/messages.html' %}
+
+            <h5 class="card-title"><i class="far fa-id-card"></i> Please connect with your identity</h5>
+            <p class="card-text">
+            <form method="POST" action="{% url 'wsn:login' %}">
+
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label for="blockcahinAddress">Blockchain address</label>
+
+                    {% if login_form.address.errors %}
+                        {% render_field login_form.address class='form-control is-invalid' %}
+                    {% else %}
+                        {% render_field login_form.address %}
+                    {% endif %}
+
+                </div>
+
+                <div class="form-group">
+                    {% if request.GET.next %}
+                        <div class="input-group">
+                            <input type="hidden" name="next" value="{{ request.GET.next }}"/>
+                        </div>
+                    {% endif %}
+                </div>
+                <button type="submit" class="btn btn-primary"><i class="fas fa-sign-in-alt"></i> Login</button>
+            </form>
+            </p>
+        </div>
+    </div>
+
+{% endblock %}
