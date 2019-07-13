@@ -1,4 +1,5 @@
 import os
+import time
 from datetime import datetime
 
 from web3 import Web3
@@ -402,8 +403,6 @@ class Blockchain:
     # Check if a node is the sink one
     @classmethod
     def check_sink_node(cls, node):
-        print(str(cls.get_sink_node().get('address')))
-        print(node)
         return cls.get_sink_node().get('address') == node
 
     # Retrieve sink node
@@ -430,15 +429,34 @@ class Blockchain:
                 for transaction_date in transactions_dates_ids:
                     sender, receiver, date, data = cls.contract.functions.getTransactionDetails(transaction_date).call()
                     if sender != '0x0000000000000000000000000000000000000000' and receiver != '0x0000000000000000000000000000000000000000':
-                        transactions.append(Transaction(sender, receiver, datetime.fromtimestamp(float(date)), data))
+                        transactions.append(Transaction(sender, receiver, date, data))
         return transactions
 
     # Send data to the cluster header
     @classmethod
     def send_data_to_cluster_header(cls, node_address, data):
-        cls.check_instances()
-        node_details = cls.contract.functions.getNodeDetails(node_address).call()
-        cluster = node_details.get('address')
+        try:
+            cls.check_instances()
+            node_details = cls.get_node_details(node_address)
+            cluster = node_details.get('cluster')
+            cluster_header = cls.get_cluster_header(cluster)
+
+            # Sending data from current connected user to the cluster-header
+            tx_hash = cls.contract.functions.sendData(node_details.get('address'), cluster_header.get('address'),
+                                                      str(time.time()), data).transact({'from': node_details.get('address'), 'gas': 1000000})
+            # Wait for transaction to be mined...
+            cls.web3.eth.waitForTransactionReceipt(tx_hash)
+
+            if cls.send_data_to_sink_node(cluster_header.get('address'), data) is True:
+                return True
+
+            # Throw exception for unssuccessfull transactions to return False
+            raise Exception
+        except Exception as ex:
+            print(ex)
+            # In case of an exception return false
+            return False
+
 
     # Retrieve cluster-header for a given cluster
     @classmethod
@@ -449,8 +467,28 @@ class Blockchain:
         for account in cluster_nodes:
             if type(account) is not str:
                 account = account[0]
-            print(account)
-            #cluster_nodes.append((account, cls.web3.eth.getBalance(account)))
+            cluster_nodes_balances.append((account, cls.web3.eth.getBalance(account)))
         print(cluster_nodes_balances)
-        # cluster_header = sorted(cluster_nodes_balances, key=lambda line : line[1])[0]
-        # print(cluster_header)
+        cluster_header = sorted(cluster_nodes_balances, key=lambda line: line[1])[0]
+        return {'address': cluster_header[0], 'balance': cluster_header[1]}
+
+    # Send data to sink node
+    @classmethod
+    def send_data_to_sink_node(cls, cluster_header_address, data):
+        try:
+            # Retrieve sink node from the blockchain
+            sink_node_address = cls.get_sink_node().get('address')
+
+            # Send received data from the cluster-header to the sink nod
+            tx_hash = cls.contract.functions.sendData(cluster_header_address, sink_node_address,
+                                                      str(time.time()), data).transact({'from': cluster_header_address, 'gas': 1000000})
+            # Wait for transaction to be mined...
+            cls.web3.eth.waitForTransactionReceipt(tx_hash)
+
+            # return true for successfull transaction
+            return True
+        except Exception as ex:
+            print(ex)
+             # return False for unsuccessfull transaction
+            return False
+

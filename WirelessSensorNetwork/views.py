@@ -39,10 +39,14 @@ class Home(View):
         if not request.session.get('user', False):
             return redirect('wsn:login')
         form = TransactionForm(request.POST or None)
-        node_cluster = request.session.get('user').get('cluster')
+        node_address = request.session.get('user').get('address')
         if form.is_valid():
-            Blockchain.get_cluster_header(node_cluster)
+            if Blockchain.send_data_to_cluster_header(node_address, form.cleaned_data['data']) is True:
+                messages.success(request, 'Transaction has been done successflly')
+                return redirect('wsn:home')
 
+        messages.error(request, 'An error occurred, please retry again')
+        return redirect('wsn:home')
 
 # -------------------------- Login View --------------------------
 class Login(View):
