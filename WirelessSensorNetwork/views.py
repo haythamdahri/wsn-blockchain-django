@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.utils.decorators import method_decorator
@@ -33,6 +33,7 @@ class Home(View):
             context['search'] = ''
         context['transactions'] = Blockchain.get_all_transaction()
         context['transaction_form'] = TransactionForm()
+        context['sink_node'] = Blockchain.get_sink_node()
         return render(request, 'WirelessSensorNetwork/index.html', context)
 
     def post(self, request):
@@ -115,3 +116,8 @@ class Profile(View):
         if not request.session.get('user', False):
             return redirect('wsn:login')
         return render(request, 'WirelessSensorNetwork/profile.html')
+
+# -------------------------- Test --------------------------
+def test(request):
+    print(Blockchain.get_sink_node())
+    return HttpResponse(Blockchain.get_sink_node())

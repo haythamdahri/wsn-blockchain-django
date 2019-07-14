@@ -42,7 +42,7 @@
                         <p><i class="fas fa-database"></i></p>
                         <p>{{ transaction.data }}</p>
                         <footer class="blockquote-footer"><i class="far fa-clock"></i> Date: <cite
-                                title="Source Title">{{ transaction.transaction_date }}</cite>
+                                title="Source Title">{{ transaction.transaction_date|date:"D, d M, Y h:i:s A" }}</cite>
                         </footer>
                     </blockquote>
                 </div>
