@@ -80,19 +80,7 @@ contract Networking {
         transactions.push(Data({
             sender: _sender,
             receiver: _receiver,
-            date: block.timestamp,
-            data: _data
-        }));
-    }
-
-    /*
-        Send data
-    */
-    function sendDataToSinkNode(address _cluster_header, string memory _data) public {
-        transactions.push(Data({
-            sender: _cluster_header,
-            receiver: sink_node_address,
-            date: block.timestamp,
+            date: now,
             data: _data
         }));
     }
@@ -175,7 +163,7 @@ contract Networking {
         uint256 size = 0;
         // Get array size
         for( uint256 i = 0; i < transactions.length; i++ ) {
-            if( transactions[i].sender == _node || transactions[i].receiver == _node ) {
+            if( (_node == sink_node_address && transactions[i].receiver == _node) || transactions[i].sender == _node || transactions[i].receiver == _node ) {
                 size++;
             }
         }
@@ -220,26 +208,5 @@ contract Networking {
     function getClustersCounters() view public returns (uint256) {
         return clustersCounter;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }

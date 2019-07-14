@@ -120,4 +120,4 @@ class Profile(View):
 # -------------------------- Test --------------------------
 def test(request):
     print(Blockchain.get_sink_node())
-    return HttpResponse(Blockchain.get_sink_node())
+    return HttpResponse(str(Blockchain.get_sink_node()))

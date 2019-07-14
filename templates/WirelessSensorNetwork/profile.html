@@ -8,6 +8,16 @@
 
     <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
 
+        <!-- Sink node message -->
+        {% if user.is_sink_node is not None and user.is_sink_node %}
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <div class="alert alert-success" role="alert">
+                    <h4 class="alert-heading"><i class="fas fa-door-open"></i> Welcome sink node</h4>
+                    <p>Your account is designed as the sink node to receive data from cluster-headers</p>
+                </div>
+            </div>
+        {% endif %}
+
         <h3 class="text-center">
             <i class="fas fa-server"></i> User Data
         </h3>
@@ -19,12 +29,14 @@
                 <th scope="col">{{ user.address }}</th>
             </tr>
             </thead>
-            <tbody>
-            <tr align="center">
-                <th scope="row"><i class="far fa-object-ungroup"></i> User cluster</th>
-                <td>{{ user.cluster }}</td>
-            </tr>
-            </tbody>
+            {% if user.cluster is not None %}
+                <tbody>
+                <tr align="center">
+                    <th scope="row"><i class="far fa-object-ungroup"></i> User cluster</th>
+                    <td>{{ user.cluster }}</td>
+                </tr>
+                </tbody>
+            {% endif %}
         </table>
     </div>
 
@@ -37,8 +49,10 @@
         <table class="table table-striped">
             <thead>
             <tr align="center">
-                <th scope="col"><i class="far fa-paper-plane"></i> Sender</th>
-                <th scope="col"><i class="fas fa-mail-bulk"></i> Receiver</th>
+                <th scope="col"><i class="far fa-paper-plane"></i> {% if user.is_sink_node %}Cluster-Header{% else %}
+                    Sender{% endif %}</th>
+                <th scope="col"><i class="fas fa-mail-bulk"></i> {% if user.is_sink_node %}Sink Node{% else %}
+                    Receiver{% endif %}</th>
                 <th scope="col"><i class="far fa-clock"></i> Date</th>
                 <th scope="col"><i class="fas fa-database"></i> Data</th>
             </tr>
@@ -51,7 +65,7 @@
                     <td>{{ transaction.transaction_date }}</td>
                     <td>
                         <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
-                                data-target="#data-modal-{{ transaction.id }}"><i class="fas fa-eye"></i> Display
+                                data-target="#data-modal-{{ forloop.counter }}"><i class="fas fa-eye"></i> Display
                         </button>
                     </td>
                 </tr>
@@ -60,7 +74,7 @@
             {% if not transactions or transactions == None %}
                 <tr>
                     <td colspan="4" align="center" class="alert alert-warning" role="alert">
-                            <i class="fas fa-exclamation-circle"></i> No transaction has been done by this account!
+                        <i class="fas fa-exclamation-circle"></i> No transaction has been done by this account!
                     </td>
                 </tr>
             {% endif %}

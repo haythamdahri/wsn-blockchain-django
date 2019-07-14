@@ -1,6 +1,5 @@
 <!-- Modal -->
-<div class="modal fade bd-example-modal-xl" id="data-modal-{{ transaction.id }}" tabindex="-1" role="dialog"
-     aria-labelledby="data-modal-{{ transaction.id }}" aria-hidden="true">
+<div class="modal fade" id="data-modal-{{ forloop.counter }}" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
@@ -16,7 +15,9 @@
                 </p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="far fa-window-close"></i> Close</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="far fa-window-close"></i>
+                    Close
+                </button>
             </div>
         </div>
     </div>
