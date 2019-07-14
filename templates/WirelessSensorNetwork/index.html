@@ -32,7 +32,7 @@
     <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
         {% for transaction in transactions %}
             <div class="card mt-3 mb-3">
-                <div class="card-header">
+                <div class="card-header {% if transaction.receiver == sink_node.address %}bg-secondary text-white{% endif %}">
                     <strong><i class="far fa-paper-plane"></i> Sender: </strong> {{ transaction.sender }} | <strong><i
                         class="fas fa-mail-bulk"></i> Receiver: </strong> {{ transaction.receiver }}
                 </div>
@@ -45,6 +45,10 @@
                         </footer>
                     </blockquote>
                 </div>
+            </div>
+        {% empty %}
+            <div class="alert alert-warning">
+                <i class="fas fa-exclamation-circle"></i> No transaction has been done found!
             </div>
         {% endfor %}
     </div>

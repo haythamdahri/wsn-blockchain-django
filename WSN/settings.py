@@ -134,7 +134,7 @@ AUTHENTICATION_BACKENDS = ['WirelessSensorNetwork.backends.ModelBackend']
 
 # Web3 configuration
 SERVER_ADDRESS = 'http://127.0.0.1:7545'
-CONTRACT_ADDRESS = '0x2750475ea6c86dE2d2035A0F5eE208be1a786B85'
+CONTRACT_ADDRESS = '0x1bd19716EF787833F90Ec7DD4Ff029BE34a166ac'
 DEPLOYED = False
 
 # Decision configuration

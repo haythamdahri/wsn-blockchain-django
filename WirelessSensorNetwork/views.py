@@ -26,12 +26,12 @@ class Home(View):
             search_keyword = search_form.cleaned_data['search']
             context['search'] = search_keyword
             try:
-                context['details'] = Blockchain.get_node_details(search_keyword)
-            except:
-                pass
+                context['transactions'] = Blockchain.get_custom_transactions(str(search_keyword))
+            except Exception as ex:
+                print(ex)
         else:
             context['search'] = ''
-        context['transactions'] = Blockchain.get_all_transaction()
+            context['transactions'] = Blockchain.get_all_transactions()
         context['transaction_form'] = TransactionForm()
         context['sink_node'] = Blockchain.get_sink_node()
         return render(request, 'WirelessSensorNetwork/index.html', context)
